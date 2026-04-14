@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nexus-Core Bridge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .terminal { background: #000; color: #00ff00; font-family: monospace; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white p-10">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold mb-5 border-b-2 border-green-500">NEXUS-CORE: MAINFRAME BRIDGE</h1>
+        
+        <div class="bg-gray-800 p-6 rounded-lg mb-6">
+            <input id="pId" type="text" placeholder="Policy ID" class="bg-gray-700 p-2 m-2 rounded">
+            <input id="amt" type="number" placeholder="Amount" class="bg-gray-700 p-2 m-2 rounded">
+            <button onclick="sendData()" class="bg-green-600 px-6 py-2 rounded hover:bg-green-500">SEND TO BRIDGE</button>
+        </div>
+
+        <div class="terminal p-5 rounded h-40 overflow-y-auto" id="output">
+            SYSTEM READY... AWAITING DATA...
+        </div>
+    </div>
+
+    <script>
+        async function sendData() {
+            const out = document.getElementById('output');
+            const data = { policyId: document.getElementById('pId').value, amount: document.getElementById('amt').value };
+            
+            out.innerHTML += "<br>> Pushing to Bridge...";
+            const response = await fetch('/api/bridge/process', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            const result = await response.text();
+            out.innerHTML += "<br>> RECEIVED: " + result;
+        }
+    </script>
+</body>
+</html>
